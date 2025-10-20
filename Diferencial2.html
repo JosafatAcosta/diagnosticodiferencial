@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Diferencial en Psicopatología</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 20px 0 10px;
+        }
+        
+        .instructions {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .case-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .case-description {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        
+        .options {
+            margin: 15px 0;
+        }
+        
+        .option {
+            margin: 10px 0;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+            border-color: var(--secondary-color);
+        }
+        
+        .option.selected {
+            background-color: #d1ecf1;
+            border-color: var(--secondary-color);
+        }
+        
+        .option.correct {
+            background-color: #d4edda;
+            border-color: var(--success-color);
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: var(--accent-color);
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #d4edda;
+            border: 1px solid var(--success-color);
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            border: 1px solid var(--accent-color);
+            color: #721c24;
+        }
+        
+        .submit-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+        }
+        
+        .case-score {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .progress-container {
+            margin: 30px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--success-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: #1a252f;
+        }
+        
+        .nav-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .case-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .case-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            margin-right: 5px;
+            background-color: #f8f9fa;
+        }
+        
+        .case-tab.active {
+            background-color: white;
+            border-color: #ddd;
+            border-bottom-color: white;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .case-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .case-tab {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Diagnóstico Diferencial en Psicopatología</h1>
+            <p>Práctica de casos clínicos para estudiantes de psicología</p>
+        </header>
+        
+        <section class="instructions">
+            <h2>Instrucciones</h2>
+            <p>En esta actividad, analizarás tres casos clínicos complejos para practicar el diagnóstico diferencial en psicopatología. Para cada caso:</p>
+            <ul>
+                <li>Lee atentamente la descripción del caso</li>
+                <li>Responde las tres preguntas para cada caso:
+                    <ol>
+                        <li>Selecciona la hipótesis diagnóstica principal</li>
+                        <li>Elige las pruebas de evaluación más adecuadas</li>
+                        <li>Identifica el tratamiento psicológico correcto</li>
+                    </ol>
+                </li>
+                <li>Recibirás retroalimentación inmediata después de enviar tus respuestas</li>
+                <li>Puedes navegar entre los casos usando las pestañas o los botones de navegación</li>
+            </ul>
+            <p><strong>Objetivo:</strong> Desarrollar habilidades para el diagnóstico diferencial basado en la evidencia conductual.</p>
+        </section>
+        
+        <div class="case-tabs">
+            <div class="case-tab active" data-case="1">Caso 1</div>
+            <div class="case-tab" data-case="2">Caso 2</div>
+            <div class="case-tab" data-case="3">Caso 3</div>
+        </div>
+        
+        <!-- Caso 1 -->
+        <div id="case-1" class="case-container">
+            <h2>Caso 1: Dificultades de Integración Social</h2>
+            
+            <div class="case-description">
+                <p>Lucas, de 6 años, es referido por su dificultad para integrarse en primer grado. Su profesora nota que es un niño "en su propio mundo". Aunque tiene un vocabulario avanzado para su edad y habla con fluidez sobre temas específicos que le interesan (como los dinosaurios o el sistema solar), tiene grandes dificultades para mantener una conversación recíproca. Frecuentemente ignora los intentos de sus compañeros por jugar con él. Cuando alguien logra atraer su atención hacia un juego estructurado, sigue las reglas al pie de la letra, pero se angustia profundamente si un compañero sugiere una modificación. En el patio, suele corretear solo siguiendo patrones repetitivos. En casa, sus padres reportan que puede ser cariñoso, pero sus respuestas emocionales suelen ser inapropiadas (se ríe cuando alguien se lastima). Es significativo que, durante la evaluación en la clínica, Lucas no habla en absoluto con la psicóloga durante los primeros 30 minutos, pero luego, tras acostumbrarse, comienza a hablar de forma monótona y extensa sobre la clasificación de los terópodos, sin permitir que la terapeuta intervenga.</p>
+            </div>
+            
+            <div class="question">
+                <h3>1. ¿Cuál es su hipótesis diagnóstica principal?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Mutismo Selectivo, dado que el síntoma más prominente y discapacitante es la incapacidad para hablar en contextos sociales específicos, como la primera sesión de evaluación.</div>
+                    <div class="option" data-value="b">Trastorno de la Comunicación Social (Pragmático), porque el núcleo del problema reside en el uso práctico del lenguaje para la comunicación social recíproca, a pesar de tener una capacidad lingüística formal intacta.</div>
+                    <div class="option" data-value="c">Trastorno del Espectro Autista (TEA), debido a la constelación de dificultades socio-comunicativas, la presencia de intereses restringidos e inusuales, y patrones de comportamiento e intereses repetitivos y rígidos.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <div class="question">
+                <h3>2. Para llegar a un diagnóstico diferencial, ¿qué batería de evaluación considera más adecuada?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Entrevista clínica centrada en la ansiedad, la Escala de Mutismo Selectivo (SMQ) y una observación en el aula para cuantificar los contextos donde se inhibe el habla.</div>
+                    <div class="option" data-value="b">Evaluación del lenguaje con pruebas como el CELF-5 para evaluar la pragmática, y la Escala de Evaluación de la Comunicación Social (SCOS).</div>
+                    <div class="option" data-value="c">Entrevista de Diagnóstico del Autismo (ADI-R) y la Escala de Observación para el Diagnóstico del Autismo (ADOS-2), complementadas con una historia del desarrollo completa.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <div class="question">
+                <h3>3. Basándose en su diagnóstico principal, ¿cuál sería el tratamiento de primera línea?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Terapia Conductual que combine técnicas de exposición gradual, desensibilización y refuerzo positivo para aumentar la verbalización en entornos temidos.</div>
+                    <div class="option" data-value="b">Intervención en Pragmática del Lenguaje, mediante terapia de grupo que enfatice las habilidades conversacionales, la interpretación del lenguaje no literal y el uso del contexto.</div>
+                    <div class="option" data-value="c">Intervenciones psicoeducativas y conductuales estructuradas como TEACCH o ESDM, combinadas con entrenamiento a padres para manejar las dificultades de comunicación y la rigidez.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <button class="submit-btn" onclick="checkAnswers(1)">Verificar Respuestas</button>
+            
+            <div class="results" id="results-1">
+                <h3>Retroalimentación del Caso 1</h3>
+                <p class="case-score" id="score-1"></p>
+                <div id="detailed-feedback-1"></div>
+            </div>
+        </div>
+        
+        <!-- Caso 2 -->
+        <div id="case-2" class="case-container" style="display: none;">
+            <h2>Caso 2: Deterioro Académico y Rechazo Escolar</h2>
+            
+            <div class="case-description">
+                <p>Sofía, una niña de 9 años, es llevada a consulta por un deterioro académico repentino y rechazo escolar. Sus profesores reportan que en los últimos 6 meses ha pasado de ser una estudiante aplicada a mostrarse constantemente "desconectada", cometiendo errores por descuido. En casa, sus padres la describen como olvidadiza y desorganizada. Recientemente, han notado manchas de heces en su ropa interior, lo que Sofía niega o intenta ocultar. Cuando se le pregunta, dice sentirse "estresada" por el colegio, específicamente por el miedo a que sus compañeros se burlen si huelen el aroma. Este miedo se ha vuelto tan intenso que presenta crisis de llanto y quejas somáticas (dolor de barriga) cada mañana. Una evaluación pediátrica exhaustiva ha descartado cualquier causa orgánica para la encopresis. Es crucial destacar que, antes de este periodo, no había historial de problemas de atención o ansiedad.</p>
+            </div>
+            
+            <div class="question">
+                <h3>1. ¿Cuál es su hipótesis diagnóstica principal?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Trastorno por Déficit de Atención e Hiperactividad (TDAH), tipo inatento, de inicio tardío, ya que los síntomas de desatención y desorganización son los que más impactan su rendimiento académico.</div>
+                    <div class="option" data-value="b">Encopresis no retentiva como diagnóstico primario, considerando la encopresis como el problema central que genera, de forma secundaria, ansiedad y problemas de concentración debido a la vergüenza.</div>
+                    <div class="option" data-value="c">Trastorno de Ansiedad (por Separación o Generalizada), entendiendo que la encopresis y los síntomas de inatención son manifestaciones comportamentales y somáticas de un cuadro de ansiedad severa y central.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <div class="question">
+                <h3>2. ¿Qué proceso de evaluación priorizaría para confirmar su hipótesis?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Cuestionarios específicos para TDAH (p. ej., Conners 3) y una evaluación neuropsicológica de las funciones ejecutivas.</div>
+                    <div class="option" data-value="b">Diario de evacuaciones, evaluación de la sensibilidad rectal y una ecografía abdominal para descartar completamente un componente retentivo o de estreñimiento.</div>
+                    <div class="option" data-value="c">Entrevistas diagnósticas semiestructuradas (p. ej., ADIS-IV) y escalas de auto-reporte de ansiedad (p. ej., SCARED) para identificar y cuantificar los trastornos de ansiedad.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <div class="question">
+                <h3>3. ¿Cuál es la intervención psicológica de primera elección para este caso?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Psicoestimulantes (p. ej., metilfenidato) y entrenamiento en organización y planificación para manejar los síntomas nucleares del TDAH.</div>
+                    <div class="option" data-value="b">Programa de "Toilet Training" con refuerzo positivo y horarios de sentada en el inodoro, junto con psicoeducación sobre la fisiología de la defecación.</div>
+                    <div class="option" data-value="c">Terapia Cognitivo-Conductual (TCC) para la ansiedad, que aborde los mecanismos de evitación, los pensamientos catastróficos y las quejas somáticas, integrando el manejo de la encopresis como un síntoma del problema principal.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <button class="submit-btn" onclick="checkAnswers(2)">Verificar Respuestas</button>
+            
+            <div class="results" id="results-2">
+                <h3>Retroalimentación del Caso 2</h3>
+                <p class="case-score" id="score-2"></p>
+                <div id="detailed-feedback-2"></div>
+            </div>
+        </div>
+        
+        <!-- Caso 3 -->
+        <div id="case-3" class="case-container" style="display: none;">
+            <h2>Caso 3: Dificultades de Comunicación y Socialización</h2>
+            
+            <div class="case-description">
+                <p>Mateo, de 8 años, acude a terapia por "fobia social". Sus padres explican que evita hablar en público y le cuesta hacer amigos. Su habla es notablemente difícil de entender debido a múltiples errores de articulación. Un fonoaudiólogo diagnosticó previamente un Trastorno Fonológico severo. A pesar de años de terapia del habla, su inteligibilidad ha mejorado poco. En sesión, Mateo evita el contacto visual, sus respuestas son monosilábicas y muestra una ansiedad evidente. Sin embargo, la terapeuta nota que, incluso en contextos de baja demanda social (como jugando con legos con su padre), no comparte espontáneamente su disfrute ni busca la mirada del otro para compartir un logro. Su juego, aunque temáticamente normal, es solitario. Sus padres añaden que tiene rutinas rígidas para las comidas y que sus "rabietas" de pequeño surgían ante cambios mínimos en su entorno.</p>
+            </div>
+            
+            <div class="question">
+                <h3>1. ¿Cuál es su hipótesis diagnóstica principal?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Trastorno Fonológico del Lenguaje, dado que es el déficit más evidente y constituye un factor causal plausible para el desarrollo de ansiedad social secundaria.</div>
+                    <div class="option" data-value="b">Trastorno de Ansiedad Social (Fobia Social), ya que la evitación, el malestar clínicamente significativo y el deterioro en las relaciones sociales son el cuadro predominante.</div>
+                    <div class="option" data-value="c">Trastorno del Espectro Autista (TEA), considerando que los déficis en la comunicación social recíproca y los patrones restringidos y repetitivos de comportamiento están presentes más allá de los límites de la simple ansiedad.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <div class="question">
+                <h3>2. ¿Qué herramientas de evaluación son cruciales para el diagnóstico diferencial?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Evaluación fonoaudiológica exhaustiva para determinar la severidad del trastorno fonológico y su impacto en la inteligibilidad.</div>
+                    <div class="option" data-value="b">Entrevista clínica y escalas de ansiedad social (p. ej., SPAI-C) para evaluar el alcance y los detonantes del miedo social.</div>
+                    <div class="option" data-value="c">Escala de Observación para el Diagnóstico del Autismo (ADOS-2) y una historia del desarrollo detallada para evaluar déficits en la interacción social recíproca y la presencia de conductas e intereses restringidos.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <div class="question">
+                <h3>3. ¿Cuál es el plan de tratamiento psicológico más apropiado?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Intensificar la Terapia del Habla, con un enfoque en la inteligibilidad, ya que al mejorar la comunicación se reducirá su frustración y ansiedad social.</div>
+                    <div class="option" data-value="b">Terapia Cognitivo-Conductual (TCC) Grupal para la fobia social, enfocada en la exposición a situaciones sociales temidas y el entrenamiento en habilidades sociales básicas.</div>
+                    <div class="option" data-value="c">Intervención basada en Análisis Conductual Aplicado (ABA) o modelos de desarrollo para abordar los déficits sociales nucleares, la rigidez y la comunicación, coordinando con terapia del lenguaje y adaptando las estrategias para la ansiedad.</div>
+                </div>
+                <div class="feedback"></div>
+            </div>
+            
+            <button class="submit-btn" onclick="checkAnswers(3)">Verificar Respuestas</button>
+            
+            <div class="results" id="results-3">
+                <h3>Retroalimentación del Caso 3</h3>
+                <p class="case-score" id="score-3"></p>
+                <div id="detailed-feedback-3"></div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn" onclick="navigateCases(-1)" disabled>Anterior</button>
+            <button class="nav-btn" id="next-btn" onclick="navigateCases(1)">Siguiente</button>
+        </div>
+        
+        <div class="progress-container">
+            <h3>Progreso General</h3>
+            <div class="progress-bar">
+                <div class="progress" id="overall-progress"></div>
+            </div>
+            <p id="progress-text">0% completado</p>
+        </div>
+    </div>
+
+    <script>
+        // Respuestas correctas para cada caso
+        const correctAnswers = {
+            1: ['c', 'c', 'c'],
+            2: ['c', 'c', 'c'],
+            3: ['c', 'c', 'c']
+        };
+        
+        // Retroalimentación detallada para cada pregunta
+        const feedbackData = {
+            1: {
+                q1: {
+                    correct: "Correcto. El Trastorno del Espectro Autista (TEA) explica mejor la constelación completa de síntomas: dificultades socio-comunicativas persistentes, intereses restringidos, patrones repetitivos de comportamiento y respuestas emocionales inapropiadas.",
+                    incorrect_a: "Incorrecto. Aunque Lucas muestra inhibición del habla inicial, el mutismo selectivo no explica sus dificultades en la comunicación social recíproca, intereses restringidos y comportamientos repetitivos.",
+                    incorrect_b: "Incorrecto. El Trastorno de la Comunicación Social podría explicar algunos aspectos pragmáticos, pero no da cuenta de los intereses restringidos, comportamientos repetitivos y respuestas emocionales inapropiadas."
+                },
+                q2: {
+                    correct: "Correcto. El ADI-R y ADOS-2 son las herramientas estándar de oro para evaluar TEA, ya que evalúan específicamente los déficits en interacción social, comunicación y patrones restringidos/repetitivos de comportamiento.",
+                    incorrect_a: "Incorrecto. Estas herramientas se centran en la ansiedad y el mutismo, pero no evalúan adecuadamente los criterios nucleares del TEA.",
+                    incorrect_b: "Incorrecto. Aunque estas pruebas evalúan aspectos del lenguaje pragmático, no son suficientes para un diagnóstico diferencial completo del TEA."
+                },
+                q3: {
+                    correct: "Correcto. Las intervenciones estructuradas como TEACCH o ESDM, combinadas con entrenamiento parental, son tratamientos basados en evidencia para TEA que abordan los déficits nucleares en comunicación, interacción social y flexibilidad.",
+                    incorrect_a: "Incorrecto. Este enfoque sería apropiado para mutismo selectivo, pero no aborda las dificultades socio-comunicativas nucleares del TEA.",
+                    incorrect_b: "Incorrecto. La intervención en pragmática podría ser un componente, pero es insuficiente para abordar el espectro completo de dificultades en el TEA."
+                }
+            },
+            2: {
+                q1: {
+                    correct: "Correcto. La ansiedad es el trastorno primario que mejor explica la constelación de síntomas: el inicio repentino, los síntomas somáticos, la encopresis como manifestación y el rechazo escolar basado en miedos específicos.",
+                    incorrect_a: "Incorrecto. El TDAH generalmente tiene un inicio temprano y persistente, no un inicio repentino a los 9 años en un contexto de estrés escolar.",
+                    incorrect_b: "Incorrecto. La encopresis como problema primario no explicaría adecuadamente el deterioro académico repentino y el patrón de ansiedad."
+                },
+                q2: {
+                    correct: "Correcto. Las entrevistas estructuradas y escalas de ansiedad son cruciales para identificar y cuantificar los trastornos de ansiedad que subyacen a la presentación clínica.",
+                    incorrect_a: "Incorrecto. Aunque los síntomas de inatención están presentes, son secundarios a la ansiedad, no constituyen un TDAH primario.",
+                    incorrect_b: "Incorrecto. La evaluación médica ya descartó causas orgánicas, por lo que enfoques adicionales en esta dirección no son prioritarios."
+                },
+                q3: {
+                    correct: "Correcto. La TCC es el tratamiento de primera línea para los trastornos de ansiedad en niños y abordaría los mecanismos subyacentes (pensamientos catastróficos, evitación) que mantienen todo el cuadro clínico.",
+                    incorrect_a: "Incorrecto. Los psicoestimulantes no están indicados para la ansiedad y podrían exacerbarla.",
+                    incorrect_b: "Incorrecto. El toilet training abordaría un síntoma pero no la causa subyacente de ansiedad que mantiene el problema."
+                }
+            },
+            3: {
+                q1: {
+                    correct: "Correcto. El TEA explica mejor los déficits en comunicación social recíproca (falta de compartir disfrute, contacto visual limitado) y los patrones restringidos/repetitivos (rutinas rígidas, rabietas por cambios) que van más allá de una simple ansiedad social.",
+                    incorrect_a: "Incorrecto. El trastorno fonológico no explica los déficits en comunicación social recíproca y los patrones rígidos de comportamiento.",
+                    incorrect_b: "Incorrecto. La ansiedad social no explica adecuadamente los déficits en compartir intereses, la falta de búsqueda de contacto visual compartido y la rigidez conductual."
+                },
+                q2: {
+                    correct: "Correcto. El ADOS-2 y una historia del desarrollo detallada son esenciales para evaluar los criterios nucleares del TEA, diferenciándolo de trastornos de ansiedad primarios.",
+                    incorrect_a: "Incorrecto. La evaluación fonoaudiológica es importante pero insuficiente para el diagnóstico diferencial del TEA.",
+                    incorrect_b: "Incorrecto. Las escalas de ansiedad social podrían identificar comorbilidades pero no evalúan adecuadamente los criterios del TEA."
+                },
+                q3: {
+                    correct: "Correcto. Las intervenciones basadas en ABA o modelos de desarrollo son tratamientos basados en evidencia para TEA que abordan los déficits nucleares en comunicación social, rigidez y comportamientos repetitivos.",
+                    incorrect_a: "Incorrecto. La terapia del habla es importante para el trastorno fonológico pero no aborda los déficits socio-comunicativos nucleares del TEA.",
+                    incorrect_b: "Incorrecto. La TCC grupal para fobia social no abordaría adecuadamente los déficits fundamentales en comunicación social recíproca del TEA."
+                }
+            }
+        };
+        
+        let currentCase = 1;
+        const userAnswers = {
+            1: {q1: null, q2: null, q3: null},
+            2: {q1: null, q2: null, q3: null},
+            3: {q1: null, q2: null, q3: null}
+        };
+        const caseCompleted = {1: false, 2: false, 3: false};
+        
+        // Inicializar eventos para las opciones
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const options = question.querySelectorAll('.option');
+                options.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const caseNum = parseInt(this.closest('.case-container').id.split('-')[1]);
+                const questionNum = 'q' + (Array.from(question.parentNode.children).indexOf(question));
+                userAnswers[caseNum][questionNum] = this.getAttribute('data-value');
+            });
+        });
+        
+        // Inicializar eventos para las pestañas
+        document.querySelectorAll('.case-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const caseNum = this.getAttribute('data-case');
+                showCase(parseInt(caseNum));
+            });
+        });
+        
+        function showCase(caseNum) {
+            // Ocultar todos los casos
+            document.querySelectorAll('.case-container').forEach(caseEl => {
+                caseEl.style.display = 'none';
+            });
+            
+            // Mostrar el caso seleccionado
+            document.getElementById(`case-${caseNum}`).style.display = 'block';
+            
+            // Actualizar pestañas activas
+            document.querySelectorAll('.case-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.case-tab[data-case="${caseNum}"]`).classList.add('active');
+            
+            // Actualizar botones de navegación
+            document.getElementById('prev-btn').disabled = caseNum === 1;
+            document.getElementById('next-btn').disabled = caseNum === 3;
+            
+            currentCase = caseNum;
+            updateProgress();
+        }
+        
+        function navigateCases(direction) {
+            const newCase = currentCase + direction;
+            if (newCase >= 1 && newCase <= 3) {
+                showCase(newCase);
+            }
+        }
+        
+        function checkAnswers(caseNum) {
+            const caseEl = document.getElementById(`case-${caseNum}`);
+            const questions = caseEl.querySelectorAll('.question');
+            let score = 0;
+            
+            questions.forEach((question, index) => {
+                const questionNum = `q${index + 1}`;
+                const userAnswer = userAnswers[caseNum][questionNum];
+                const correctAnswer = correctAnswers[caseNum][index];
+                const options = question.querySelectorAll('.option');
+                const feedback = question.querySelector('.feedback');
+                
+                // Limpiar clases anteriores
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                });
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.textContent = '';
+                feedback.style.display = 'none';
+                
+                if (userAnswer) {
+                    // Marcar respuestas correctas e incorrectas
+                    options.forEach(opt => {
+                        if (opt.getAttribute('data-value') === correctAnswer) {
+                            opt.classList.add('correct');
+                        } else if (opt.getAttribute('data-value') === userAnswer && userAnswer !== correctAnswer) {
+                            opt.classList.add('incorrect');
+                        }
+                    });
+                    
+                    // Mostrar retroalimentación
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                        feedback.textContent = feedbackData[caseNum][questionNum].correct;
+                        feedback.classList.add('correct');
+                    } else {
+                        feedback.textContent = feedbackData[caseNum][questionNum][`incorrect_${userAnswer}`];
+                        feedback.classList.add('incorrect');
+                    }
+                    feedback.style.display = 'block';
+                } else {
+                    // Si no se seleccionó respuesta
+                    feedback.textContent = 'Por favor, selecciona una respuesta antes de verificar.';
+                    feedback.classList.add('incorrect');
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            // Mostrar resultados generales del caso
+            const resultsEl = document.getElementById(`results-${caseNum}`);
+            const scoreEl = document.getElementById(`score-${caseNum}`);
+            const detailedFeedbackEl = document.getElementById(`detailed-feedback-${caseNum}`);
+            
+            scoreEl.textContent = `Puntuación: ${score}/3 (${Math.round(score/3*100)}%)`;
+            
+            let detailedFeedback = '<h4>Resumen:</h4><ul>';
+            if (score === 3) {
+                detailedFeedback += '<li>Excelente trabajo. Has identificado correctamente el diagnóstico principal y las intervenciones apropiadas.</li>';
+            } else if (score === 2) {
+                detailedFeedback += '<li>Buen trabajo, pero hay un área que necesita más atención. Revisa la retroalimentación específica.</li>';
+            } else if (score === 1) {
+                detailedFeedback += '<li>Es necesario repasar los conceptos de diagnóstico diferencial para este caso.</li>';
+            } else {
+                detailedFeedback += '<li>Recomendamos estudiar más a fondo los criterios diagnósticos y las presentaciones clínicas de estos trastornos.</li>';
+            }
+            detailedFeedback += '</ul>';
+            
+            detailedFeedbackEl.innerHTML = detailedFeedback;
+            resultsEl.style.display = 'block';
+            
+            caseCompleted[caseNum] = true;
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const completedCases = Object.values(caseCompleted).filter(Boolean).length;
+            const progressPercentage = Math.round((completedCases / 3) * 100);
+            
+            document.getElementById('overall-progress').style.width = `${progressPercentage}%`;
+            document.getElementById('progress-text').textContent = `${progressPercentage}% completado (${completedCases}/3 casos)`;
+        }
+        
+        // Inicializar mostrando el primer caso
+        showCase(1);
+    </script>
+</body>
+</html>
